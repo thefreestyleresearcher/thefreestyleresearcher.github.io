@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Patryk Ptak — Cybersecurity & Vulnerability Research</title>
-<meta name="description" content="Senior Cyber Security Consultant and independent vulnerability researcher. CVEs, exploit development, product & application security.">
+<meta name="description" content="Independent vulnerability researcher specialising in logic and design flaws. CVE contributor since 2017 — Apple iOS, NETGEAR, VeraCrypt, Google, VLC. CISA KEV-listed CVEs.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0e14'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%233ddc97'>PP</text></svg>">
 
 <!-- Open Graph -->
@@ -159,7 +159,7 @@ footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:v
         <div class="research">
           <a href="https://x.com/__tfr" target="_blank" rel="noopener me"><span>x —</span> @__tfr</a>
           <a href="mailto:kroppoloe@protonmail.ch"><span>email —</span> kroppoloe@protonmail.ch</a>
-          <a href="https://keys.openpgp.org/search?q=kroppoloe@protonmail.ch" target="_blank" rel="noopener"><span>pgp —</span> pubkey.asc</a>
+          <a href="/pubkey.asc"><span>pgp —</span> pubkey.asc</a>
         </div>
       </div>
 
@@ -210,7 +210,7 @@ footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:v
           <div class="soon-left">
             <div class="soon-tags"><span>Research</span><span>Linux</span><span>Remote Code Execution</span></div>
             <div class="soon-title" id="soon-title-1">KDE Plasma – Remote Command Execution</div>
-            <div class="soon-sub" id="soon-sub-1">Single vulnerability affecting multiple applications, including single click compromise scenarios on hardened, memory-safe targets.</div>
+            <div class="soon-sub" id="soon-sub-1">Logic flaws enabling remote command execution — single-click compromise scenarios on hardened, memory-safe targets.</div>
           </div>
           <div class="soon-badge" id="soon-badge-1">Coming soon...</div>
         </div>
@@ -218,7 +218,7 @@ footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:v
           <div class="soon-left">
             <div class="soon-tags"><span>Research</span><span>Windows</span><span>Patch Bypass</span></div>
             <div class="soon-title" id="soon-title-0">Windows Explorer – NTLM Leak Vulnerabilities Patch Bypass</div>
-            <div class="soon-sub" id="soon-sub-0">Bypasses of Microsoft's fixes for multiple Windows Explorer vulnerabilities.</div>
+            <div class="soon-sub" id="soon-sub-0">Patch bypass techniques for Windows Explorer NTLM credential leak vulnerabilities (CVE-2025-24071, CVE-2025-24054 and others) — full and partial bypasses.</div>
           </div>
           <div class="soon-badge" id="soon-badge-0">Coming soon...</div>
         </div>
@@ -351,7 +351,7 @@ const posts = [
     date: '2017-03-02',
     slug: 'netgear-rce-chain-2017',
     exploited: true,
-    tags: ['Research', 'Embedded', 'Remote Code Execution'],
+    tags: ['Research', 'Embedded / IoT', 'Remote Code Execution'],
     title: {
       pl: 'NETGEAR DGN2200 – łańcuch: RCE przez command injection + obejście uwierzytelniania',
       en: 'NETGEAR DGN2200 – chain: RCE via command injection + authentication bypass'
@@ -377,7 +377,7 @@ const i18n = {
   pl: {
     loc: 'Warszawa, Polska · Praca zdalna',
     bio: [
-      'Specjalista cyberbezpieczeństwa znany jako SivertPL, działający na styku ofensywnego researchu i doradztwa enterprise.',
+      'Researcher specjalizujący się w identyfikacji nieznanych podatności przez analizę logiki i architektury systemów — od firmware embedded, przez systemy operacyjne, po aplikacje webowe. Znany jako SivertPL.',
       'Od 2017 publicznie ujawniam podatności w realnie wykorzystywanym oprogramowaniu i urządzeniach – od routerów, po systemy mobilne i narzędzia szyfrujące.'
     ],
     expH: 'Doświadczenie',
@@ -396,7 +396,7 @@ const i18n = {
   en: {
     loc: 'Warsaw, Poland · Remote globally',
     bio: [
-      'Cybersecurity professional known as SivertPL, working at the intersection of offensive security research and enterprise consulting.',
+      'Researcher specialising in the discovery of unknown vulnerabilities through logic and architecture analysis — from embedded firmware to operating systems and web applications. Known as SivertPL.',
       'Since 2017, publicly disclosing vulnerabilities in real-world software and devices — from routers to mobile platforms and encryption tools.'
     ],
     expH: 'Experience',
