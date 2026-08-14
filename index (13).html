@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patryk Ptak - Cybersecurity & Vulnerability Research</title>
+<meta name="description" content="Independent vulnerability researcher specialising in logic and design flaws. CVE contributor since 2017 - Apple iOS, NETGEAR, VeraCrypt, Google, VLC. CISA KEV-listed CVEs.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0e14'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%233ddc97'>PP</text></svg>">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://patrykptak.pl/">
+<meta property="og:title" content="Patryk Ptak - Cybersecurity & Vulnerability Research">
+<meta property="og:description" content="Researcher specialising in the discovery of unknown vulnerabilities through logic and architecture analysis. CVE contributor since 2017 - Apple iOS, NETGEAR, VeraCrypt, Google, VLC.">
+<meta property="og:image" content="https://patrykptak.pl/og-image.png">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@__tfr">
+<meta name="twitter:creator" content="@__tfr">
+<meta name="twitter:title" content="Patryk Ptak - Cybersecurity & Vulnerability Research">
+<meta name="twitter:description" content="Researcher specialising in unknown vulnerability discovery through logic and architecture analysis. CVE contributor since 2017.">
+<meta name="twitter:image" content="https://patrykptak.pl/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14; --panel:#11161f; --panel2:#0d1219; --line:#1e2733;
+  --txt:#c9d3df; --dim:#7a8799; --accent:#3ddc97; --accent2:#5b9dff;
+  --red:#ff5c5c; --red-bg:rgba(255,92,92,.08); --red-line:rgba(255,92,92,.3);
+  --mono:'Space Mono',monospace; --sans:'Sora',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--sans);font-weight:300;line-height:1.6;
+  background-image:radial-gradient(circle at 15% 10%,rgba(91,157,255,.07),transparent 40%),radial-gradient(circle at 85% 90%,rgba(61,220,151,.06),transparent 45%);}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);background:#0d1219;border:1px solid var(--line);padding:1px 6px;border-radius:4px;font-size:.85em;color:var(--accent)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(10,14,20,.92);backdrop-filter:blur(10px);z-index:10}
+.brand{font-family:var(--mono);font-weight:700;letter-spacing:.5px;font-size:.95rem}
+.brand b{color:var(--accent)}
+.langsw{display:flex;gap:6px}
+.langsw a{font-family:var(--mono);font-size:.8rem;padding:5px 10px;border:1px solid var(--line);border-radius:6px;color:var(--dim);cursor:pointer;user-select:none}
+.langsw a.on{background:var(--accent);color:#04130c;border-color:var(--accent);font-weight:700}
+
+.layout{display:grid;grid-template-columns:300px 1fr;gap:36px;padding:40px 0 70px;align-items:start}
+@media(max-width:800px){.layout{grid-template-columns:1fr;gap:24px;padding:24px 0 50px}}
+
+.side{position:sticky;top:76px}
+@media(max-width:800px){.side{position:static}}
+.card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:24px}
+.side h1{font-size:1.3rem;font-weight:800;margin:0 0 4px;line-height:1.2}
+.side .role{font-family:var(--mono);font-size:.72rem;color:var(--accent);line-height:1.6;margin-bottom:12px}
+.side .loc{font-size:.82rem;color:var(--dim);margin-bottom:12px}
+.side .bio{font-size:.86rem;color:var(--txt);margin-bottom:16px}
+.side .bio p{margin:0 0 8px}
+.side .bio p:last-child{margin:0}
+
+.contact a{display:flex;align-items:baseline;gap:6px;font-family:var(--mono);font-size:.78rem;padding:4px 0;color:var(--txt);border-bottom:1px solid transparent;transition:border-color .15s}
+.contact a:hover{text-decoration:none;border-color:var(--line)}
+.contact a span{color:var(--dim);flex-shrink:0}
+.contact-sep{display:flex;align-items:center;gap:8px;margin:10px 0 4px;font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--dim)}
+.contact-sep::before,.contact-sep::after{content:'';flex:1;height:1px;background:var(--line)}
+.contact .research a{color:var(--dim)}
+.contact .research a:hover{color:var(--txt)}
+
+
+.sec-h{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin:20px 0 10px;border-top:1px solid var(--line);padding-top:14px}
+.exp{margin-bottom:12px}
+.exp .co{font-weight:600;font-size:.9rem}
+.exp .ro{font-size:.8rem;color:var(--accent2)}
+.exp .dt{font-family:var(--mono);font-size:.7rem;color:var(--dim)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tags span{font-family:var(--mono);font-size:.65rem;color:var(--dim);border:1px solid var(--line);padding:3px 7px;border-radius:5px}
+
+/* blog tabs */
+.blog-h{margin:0 0 4px;font-size:1.9rem;font-weight:800;letter-spacing:-.5px}
+@media(max-width:800px){.blog-h{font-size:1.5rem}}
+.blog-sub{color:var(--dim);font-size:.88rem;margin-bottom:20px;font-family:var(--mono)}
+.tabs{display:flex;gap:0;margin-bottom:26px;border-bottom:1px solid var(--line)}
+.tab-btn{font-family:var(--mono);font-size:.78rem;padding:8px 18px;background:none;border:none;border-bottom:2px solid transparent;color:var(--dim);cursor:pointer;margin-bottom:-1px;transition:color .15s,border-color .15s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
+.tab-btn:hover{color:var(--txt)}
+.tab-btn.on{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+
+/* posts */
+.post{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:20px;transition:border-color .2s,transform .2s}
+@media(max-width:800px){.post{padding:18px;border-radius:12px}}
+.post:hover{border-color:#2c3a4d;transform:translateY(-2px)}
+@media(hover:none){.post:hover{transform:none}}
+.post .meta{font-family:var(--mono);font-size:.7rem;color:var(--accent);margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.post .meta .badge{background:rgba(61,220,151,.1);border:1px solid rgba(61,220,151,.3);padding:2px 8px;border-radius:20px}
+.post .meta .kev{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red);padding:2px 8px;border-radius:20px;font-weight:700;letter-spacing:.3px}
+.post h2{font-size:1.2rem;font-weight:600;margin:0 0 10px;line-height:1.35}
+@media(max-width:480px){.post h2{font-size:1.05rem}}
+.post .lead{color:var(--txt);font-size:.92rem;line-height:1.65}
+.post .full{display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.post.open .full{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+.post .full p{margin:0 0 12px;font-size:.9rem;line-height:1.7}
+.post .full ul{margin:0 0 12px;padding-left:18px}
+.post .full li{font-family:var(--mono);font-size:.82rem;margin:4px 0}
+.ptags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.ptags span{font-family:var(--mono);font-size:.64rem;color:var(--accent2);background:rgba(91,157,255,.08);border:1px solid rgba(91,157,255,.25);padding:2px 7px;border-radius:5px}
+.links{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
+.links a{display:inline-block;font-family:var(--mono);font-size:.74rem;padding:5px 10px;border:1px solid var(--line);border-radius:7px;color:var(--txt)}
+.links a:hover{border-color:var(--accent);text-decoration:none}
+.links a::before{content:"↗ ";color:var(--accent)}
+.toggle{margin-top:14px;background:none;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:.76rem;padding:7px 16px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;-webkit-tap-highlight-color:transparent}
+.toggle:hover{background:var(--accent);color:#04130c}.toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.toggle:focus:not(:focus-visible){outline:none}.toggle:active{background:var(--accent);color:#04130c}
+@media(max-width:800px){.toggle{width:100%;text-align:center;padding:10px}}
+
+/* coming soon entries */
+.soon-list{display:flex;flex-direction:column;gap:14px}
+.soon-entry{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:22px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+@media(max-width:600px){.soon-entry{flex-direction:column;align-items:flex-start;gap:10px}}
+.soon-entry:hover{border-color:#2c3a4d}
+.soon-tags{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
+.soon-tags span{font-family:var(--mono);font-size:.64rem;color:var(--accent2);background:rgba(91,157,255,.08);border:1px solid rgba(91,157,255,.25);padding:2px 7px;border-radius:5px}
+.soon-title{font-size:1.1rem;font-weight:600;line-height:1.3;color:var(--txt)}
+.soon-sub{font-family:var(--mono);font-size:.74rem;color:var(--dim);margin-top:5px}
+.soon-badge{font-family:var(--mono);font-size:.68rem;color:var(--dim);background:#0a0e14;border:1px solid var(--line);border-radius:20px;padding:4px 12px;white-space:nowrap;flex-shrink:0}
+
+footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:var(--dim);font-family:var(--mono);font-size:.74rem}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;width:100%">
+    <span class="brand">Patryk<b>Ptak</b>.pl</span>
+    <span class="langsw">
+      <a id="btn-pl" class="on" onclick="setLang('pl')">PL</a>
+      <a id="btn-en" onclick="setLang('en')">EN</a>
+    </span>
+  </div>
+</div>
+
+<div class="wrap">
+<div class="layout">
+
+  <aside class="side">
+    <div class="card">
+      <h1>Patryk Ptak</h1>
+      <div class="role">Senior Cyber Security Consultant · Independent Vulnerability Researcher · CVE Contributor</div>
+      <div class="loc" id="loc">Warszawa, Polska · Praca zdalna</div>
+      <div class="bio" id="bio"></div>
+      <div class="contact">
+        <a href="https://x.com/__tfr" target="_blank" rel="noopener me"><span>x -</span> @__tfr</a>
+        <a href="mailto:kroppoloe@protonmail.ch"><span>email -</span> kroppoloe@protonmail.ch</a>
+        <a href="https://keys.openpgp.org/vks/v1/by-fingerprint/155564B846F2D34F2B65DD6F3D952866094672BB" target="_blank" rel="noopener"><span>pgp -</span> 155564B8...094672BB</a>
+        <a href="https://bugcrowd.com/h/SivertPL" target="_blank" rel="noopener"><span>bugcrowd -</span> /SivertPL</a>
+        <div class="contact-sep" id="contact-sep-txt">professional</div>
+        <div class="research">
+          <a href="mailto:wspolpraca@patrykptak.pl"><span>email -</span> wspolpraca@patrykptak.pl</a>
+          <a href="https://www.linkedin.com/in/patrykptakcybersecurityconsulting" target="_blank" rel="noopener me"><span>linkedin -</span> /patrykptak...</a>
+        </div>
+      </div>
+
+      <div class="sec-h" id="exp-h">Doświadczenie</div>
+      <div class="exp">
+        <div class="co">Independent</div>
+        <div class="ro">Cyber Security Researcher</div>
+        <div class="dt">01.2014 - <span class="t-present">obecnie</span></div>
+      </div>
+      <div class="exp">
+        <div class="co">Kroll</div>
+        <div class="ro">Senior Cyber Security Consultant</div>
+        <div class="dt">06.2023 - <span class="t-present">obecnie</span></div>
+      </div>
+      <div class="exp">
+        <div class="co">Euvic</div>
+        <div class="ro">Cyber Security Consultant</div>
+        <div class="dt">07.2019 - 06.2023</div>
+      </div>
+
+      <div class="sec-h" id="skills-h">Umiejętności</div>
+      <div class="tags">
+        <span>Vulnerability Research</span><span>Exploit Development</span><span>Dynamic Analysis</span>
+        <span>Black-box Analysis</span><span>Logic Flaws</span><span>Reverse Engineering</span>
+        <span>Memory Corruption</span><span>Web App Security</span><span>Static Analysis</span>
+        <span>Embedded Security</span><span>Fuzzing</span><span>Crash Triage</span>
+        <span>Root Cause Analysis</span><span>Patch Analysis</span><span>Coordinated Disclosure</span>
+      </div>
+    </div>
+  </aside>
+
+  <main id="posts-container">
+    <h2 class="blog-h" id="blog-h">Research</h2>
+    <p class="blog-sub" id="blog-sub">// public writeups & vulnerabilities</p>
+
+    <div class="tabs">
+      <button class="tab-btn on" onclick="switchTab('research',this)" id="tab-research">Research <span style="font-size:.65rem;opacity:.6">(9)</span></button>
+      <button class="tab-btn" onclick="switchTab('soon',this)" id="tab-soon">Upcoming <span style="font-size:.65rem;opacity:.6">(1)</span></button>
+    </div>
+
+    <div class="tab-panel on" id="panel-research">
+      <!-- posts injected by JS -->
+    </div>
+
+    <div class="tab-panel" id="panel-soon">
+      <div class="soon-list">
+        <div class="soon-entry">
+          <div class="soon-left">
+            <div class="soon-tags"><span>Research</span><span>Windows</span><span>Patch Bypass</span></div>
+            <div class="soon-title" id="soon-title-0">Windows Explorer - NTLM Leak Vulnerabilities Patch Bypass</div>
+            <div class="soon-sub" id="soon-sub-0">Patch bypass techniques for Windows Explorer NTLM credential leak vulnerabilities (CVE-2025-24071, CVE-2025-24054 and others) - full and partial bypasses.</div>
+          </div>
+          <div class="soon-badge" id="soon-badge-0">Upcoming</div>
+        </div>
+        
+      </div>
+    </div>
+  </main>
+
+</div>
+</div>
+
+<footer id="footer">
+  &copy; <span id="footer-year"></span> Patryk Ptak &middot; patrykptak.pl &middot;
+  <span id="footer-txt">Wszystkie publikacje dotyczą odpowiedzialnie ujawnionych podatności.</span>
+</footer>
+
+<script>
+
+const posts = [
+  {
+    date: '2026-08-03',
+    slug: 'gajim-kde-plasma-rce-2026',
+    tags: ['Research', 'Linux', 'Remote Code Execution'],
+    title: {
+      pl: 'Gajim + KDE Plasma - łańcuch podatności prowadzący do RCE jednym kliknięciem',
+      en: 'Gajim + KDE Plasma - one-click RCE vulnerability chain'
+    },
+    lead: {
+      pl: 'Autorski łańcuch łączący lukę logiczną w obsłudze linków w KDE Plasma z mechanizmem cache awatarów w szyfrowanym komunikatorze Gajim, prowadzący do zdalnego wykonania kodu po kliknięciu w spreparowany link.',
+      en: 'An original exploit chain combining a logic flaw in KDE Plasma\'s link handling with the avatar cache mechanism in the encrypted Gajim messenger, resulting in remote code execution after clicking a crafted link.'
+    },
+    body: {
+      pl: '<p>Źródłem problemu jest podatny komponent Konsole w KDE Plasma, obsługujący schematy URI jak <code>telnet://</code>. Gdy w systemie brakuje klienta <code>telnet</code> - domyślnie na Debianie, Fedorze, openSUSE i Arch Linux, i wielu innych - Konsole wykonuje niekontrolowany fallback i przekazuje zawartość linku do <code>bash -c</code>.</p><p>Do wykorzystania błędu brakowało pliku o znanej lokalizacji na dysku ofiary. Tu wchodzi Gajim: komunikator automatycznie zapisuje awatary kontaktów w <code>~/.cache/gajim/avatars/</code> pod nazwą będącą hashem SHA-1 zawartości pliku, bez weryfikacji jego struktury. Podesłanie ofierze przez XMPP spreparowanego "awatara" (w praktyce skryptu shell) umieszcza go w przewidywalnym miejscu, bez żadnej interakcji.</p><p>Ostatni element to link <code>telnet://</code> wskazujący tę ścieżkę, zaciemniony techniką RTLO (Right-To-Left Override), znakiem <code>%00</code> oraz percent-encodingiem, tak że w Gajimie wygląda jak zwykły link. Kliknięcie uruchamia podstawiony skrypt z uprawnieniami KDE (zamiast Gajima), który łączy się z serwerem C2 i otwiera w tle prawidłowy URL (dla zmylenia celu), a na końcu się usuwa.</p><p>Pełny opis, wideo i uzbrojony PoC opublikowałem na łamach <a href="https://sekurak.pl/grozny-atak-na-szyfrowany-komunikator-gajim-przez-luke-w-kde-plasma/">Sekuraka</a>.</p>',
+      en: '<p>The root cause is the vulnerable Konsole component in KDE Plasma (which I also identified independently), handling URI schemes such as <code>telnet://</code>. When no telnet client is installed - the default on Debian, Fedora, openSUSE, Arch Linux and many others - Konsole silently falls back and passes the link\'s content to <code>bash -c</code>.</p><p>Exploiting the bug still required a file at a location known to the attacker. That\'s where Gajim comes in: the messenger automatically stores contact avatars in <code>~/.cache/gajim/avatars/</code>, named after a SHA-1 hash of the file\'s content, without validating its structure. Sending a victim a crafted "avatar" (really a shell script) via XMPP drops it at a predictable path, with zero interaction.</p><p>The final piece is a <code>telnet://</code> link pointing at that path, obfuscated using the RTLO technique (Right-To-Left Override), a <code>%00</code> byte and percent-encoding, so it displays in Gajim as an ordinary link. Clicking it executes the planted script with KDE\'s privileges (not Gajim\'s!), which calls home to a C2 server, opens a legitimate URL in the background as a decoy, and finally self-deletes.</p><p>Full write-up, a demo video and a weaponised PoC are published on <a href="https://sekurak.pl/grozny-atak-na-szyfrowany-komunikator-gajim-przez-luke-w-kde-plasma/">Sekurak</a>.</p>'
+    },
+    links: [
+      ['Sekurak.pl writeup', 'https://sekurak.pl/grozny-atak-na-szyfrowany-komunikator-gajim-przez-luke-w-kde-plasma/'],
+      ['YouTube PoC', 'https://www.youtube.com/watch?v=F7UgNGK-4f4'],
+      ['CVE-2025-49091 (NVD)', 'https://nvd.nist.gov/vuln/detail/CVE-2025-49091'],
+      ['CWE-670 (MITRE)', 'https://cwe.mitre.org/data/definitions/670.html'],
+    ]
+  },
+  {
+    date: '2025-10-16',
+    slug: 'google-insecure-redirect-2025',
+    tags: ['Research', 'Web', 'Insecure Redirect'],
+    title: {
+      pl: 'apis.google.com - niezabezpieczone przekierowanie',
+      en: 'apis.google.com - insecure redirect'
+    },
+    lead: {
+      pl: 'Endpoint w domenie apis.google.com umożliwiał niekontrolowane przekierowania, pozwalając na tworzenie odnoników z zaufanej domeny Google do arbitralnych zewnętrznych serwisów.',
+      en: 'An endpoint on apis.google.com allowed unrestricted redirects, enabling the creation of links from a trusted Google domain pointing to arbitrary external websites.'
+    },
+    body: {
+      pl: '<p>Mechanizm przekierowania dostępny pod <code>apis.google.com/additnow/l</code> nie ograniczał wartości parametru <code>__lu</code>, który określał docelowy adres URL.</p><p>Tego typu błędy są często wykorzystywane do ukrywania końcowego URL oraz obchodzenia mechanizmów filtrowania opartych na reputacji domeny.</p>',
+      en: '<p>The redirect mechanism exposed through <code>apis.google.com/additnow/l</code> failed to restrict the value of the <code>__lu</code> parameter, which defined the redirect destination URL.</p><p>This class of flaw is commonly leveraged to conceal final destinations and bypass reputation-based filtering and security controls.</p>'
+    },
+    links: [
+      ['PacketStorm writeup', 'https://packetstorm.news/files/id/217787/'],
+      ['seclists.org writeup', 'https://seclists.org/fulldisclosure/2025/Oct/11'],
+      ['CWE-601 (MITRE)', 'https://cwe.mitre.org/data/definitions/601.html'],
+    ]
+  },
+  {
+    date: '2025-05-16',
+    slug: 'ios-screen-time-passcode-2025',
+    tags: ['Research', 'iOS', 'Privilege Escalation'],
+    title: {
+      pl: 'Apple iOS < 18.5 - Screen Time: pozyskanie kodu dostępu do panelu ustawień',
+      en: 'Apple iOS < 18.5 - Screen Time: passcode retrieval vulnerability'
+    },
+    lead: {
+      pl: 'Podatność w funkcjonalności Screen Time (kontrola rodzicielska) w iOS umożliwiała ujawnienie kodu numerycznego chroniącego panel ustawień, prowadząc do pełnego obejścia ograniczeń rodzicielskich.',
+      en: 'A vulnerability in the iOS Screen Time functionality (parental controls) allowed disclosure of the numeric passcode protecting the Settings panel, enabling a full bypass of parental restrictions.'
+    },
+    body: {
+      pl: '<p>Analiza skupiała się na egzekwowaniu limitów prób wprowadzenia kodów dostępu. Luka logiczna w tym mechanizmie umożliwiała pozyskanie czterocyfrowego kodu, omijając limit liczby prób.</p><p>Przygotowałem opis techniczny z odtwarzalnymi krokami, <a href="https://www.youtube.com/watch?v=vVvk9TR7qMo">filmem wideo</a> i oceną real-world impact. Analiza prowadzona na wersji 17.2.1, poprawka (silent patch) w iOS 18.5.</p>',
+      en: '<p>The analysis focused on enforcement of passcode attempt limits. A logic flaw in this mechanism allowed disclosure of the four-digit code without exhausting the permitted number of attempts.</p><p>I prepared a technical write-up with reproducible steps, a <a href="https://www.youtube.com/watch?v=vVvk9TR7qMo">video recording</a>, and an impact assessment. Analysis conducted on version 17.2.1; fix (silent patch) shipped in iOS 18.5.</p>'
+    },
+    links: [
+      ['PacketStorm writeup', 'https://packetstorm.news/files/id/181796'],
+      ['Video', 'https://www.youtube.com/watch?v=vVvk9TR7qMo'],
+      ['CWE-799 (MITRE)', 'https://cwe.mitre.org/data/definitions/799.html'],
+    ]
+  },
+  {
+    date: '2025-02-04',
+    slug: 'veracrypt-privesc-2025',
+    tags: ['Research', 'Linux / macOS', 'Privilege Escalation'],
+    title: {
+      pl: 'VeraCrypt < 1.26.18 - eskalacja uprawnień do root na Linux i macOS',
+      en: 'VeraCrypt < 1.26.18 - privilege escalation to root on Linux & macOS'
+    },
+    lead: {
+      pl: 'Dwie podatności w VeraCrypt umożliwiające eskalację uprawnień do root przez luki logiczne. Załatane w wersji 1.26.18.',
+      en: 'Two vulnerabilities in VeraCrypt allowing privilege escalation to root via logic flaws. Fixed in version 1.26.18.'
+    },
+    body: {
+      pl: '<p>VeraCrypt lokalizował systemowe pliki binarne (jak <code>mount</code>) wyłącznie przez zmienną środowiskową <code>PATH</code>. Atakujący kontrolujący środowisko mógł podstawić własny plik wykonywalny i uruchomić go z uprawnieniami root podczas operacji montowania woluminu (shadowing, path hijacking).</p><p>Zbudowałem scenariusze potwierdzające real-world impact i opracowałem rekomendacje hardeningu. Badania prowadzone we współpracy z Mounirem Idrassim (<a href="https://mastodon.social/@veracrypt/113869278633537613">@veracrypt</a>), autorem VeraCrypt.</p><ul><li>CVE-2024-54187 - eskalacja uprawnień przez path hijacking (współautor: Idrassi)</li><li>CVE-2025-23021 - eskalacja uprawnień przez path hijacking</li></ul>',
+      en: '<p>VeraCrypt resolved system binaries (such as <code>mount</code>) solely through the <code>PATH</code> environment variable. An attacker with control over the environment could substitute a malicious executable and have it run with root privileges during a volume mount operation (shadowing, path hijacking).</p><p>I built scenarios confirming real-world impact and prepared hardening recommendations. Research conducted in collaboration with Mounir Idrassi (<a href="https://mastodon.social/@veracrypt/113869278633537613">@veracrypt</a>), the author of VeraCrypt.</p><ul><li>CVE-2024-54187 - privilege escalation via path hijacking (co-authored with Idrassi)</li><li>CVE-2025-23021 - privilege escalation via path hijacking</li></ul>'
+    },
+    links: [
+      ['VeraCrypt Release Note', 'https://web.archive.org/web/20250121124037/https://veracrypt.fr/en/Release%20Notes.html'],
+      ['CVE-2024-54187 (NVD)', 'https://nvd.nist.gov/vuln/detail/CVE-2024-54187'],
+      ['CVE-2025-23021 (NVD)', 'https://nvd.nist.gov/vuln/detail/CVE-2025-23021'],
+    ]
+  },
+  {
+    date: '2022-08-05',
+    slug: 'microsoft-account-signup-bypass-2022',
+    tags: ['Research', 'Web', 'Mitigation Bypass'],
+    title: {
+      pl: 'Microsoft Account - obejście zabezpieczeń rejestracji przez wewnętrzne API Windows OOBE',
+      en: 'Microsoft Account - registration anti-abuse controls bypass via Windows OOBE internal API'
+    },
+    lead: {
+      pl: 'Luka w procesie rejestracji kont Microsoft umożliwiała masowe zakładanie kont z pominięciem weryfikacji SMS, CAPTCHA oraz blokad sieci TOR/proxy poprzez nadużycie wewnętrznego API Windows OOBE Signup UX.',
+      en: 'A flaw in the Microsoft account registration flow allowed mass account creation bypassing SMS verification, CAPTCHA, and TOR/proxy blocks by abusing the internal Windows OOBE Signup UX API.'
+    },
+    body: {
+      pl: '<p>Ścieżka rejestracji Windows OOBE wydaje wewnętrzny <code>device ticket</code> powiązany z identyfikatorem sprzętowym. Endpoint rejestracyjny akceptował go jako dowód legalności urządzenia, poluzowując standardowe zabezpieczenia anti-abuse. Identyfikator sprzętowy można trywialnie podmienić, umożliwiając tworzenie kont na dowolny numer telefonu bez interakcji z jego właścicielem.</p><p>Zgłoszenie do MSRC zawierało działający PoC oraz nagranie wideo. Microsoft zamknął sprawę bez CVE, klasyfikując problem jako <em>potential fraud let-thru</em>, jednak w odpowiedzi na zgłoszenie wdrożył zmiany: dodanie CAPTCHA i drastyczne zmniejszenie limitów rejestracji per <code>device ticket</code>.</p><p>Badania wspomagał drugi badacz, który chce zachować anonimowość. Ref: MSRC Case 73588.</p>',
+      en: '<p>The Windows OOBE registration path issues a <code>device ticket</code> tied to a hardware identifier, accepted by the registration endpoint as proof of device legitimacy - relaxing anti-abuse controls including SMS verification, CAPTCHA, and TOR/proxy blocks. This allowed unlimited account creation against arbitrary phone numbers.</p><p>The report to MSRC included a working PoC and video demonstration. Microsoft closed the case without a CVE, classifying it as <em>potential fraud let-thru</em>, but subsequently deployed mitigations: CAPTCHA and significantly reduced per-<code>device ticket</code> registration limits.</p><p>Research assisted by a second researcher who wishes to remain anonymous. Ref: MSRC Case 73588.</p>'
+    },
+    links: [
+      ['MSRC Case 73588 (PDF)', 'MSRC_Case_73588.pdf'],
+      ['CWE-345 (MITRE)', 'https://cwe.mitre.org/data/definitions/345.html'],
+      ['CWE-602 (MITRE)', 'https://cwe.mitre.org/data/definitions/602.html'],
+    ]
+  },
+  {
+    date: '2021-03-22',
+    slug: 'mybb-rce-chain-2021',
+    tags: ['PoC', 'Web', 'Remote Code Execution'],
+    title: {
+      pl: 'MyBB < 1.8.26 - łańcuch podatności: Stored XSS + SQL Injection do RCE',
+      en: 'MyBB < 1.8.26 - exploit chain: Stored XSS + SQL Injection to RCE'
+    },
+    lead: {
+      pl: 'Publiczne, kompletne exploity na łańcuchy podatności łączące Stored XSS z SQL Injection, prowadzące do zdalnego wykonania kodu w popularnym silniku forum MyBB.',
+      en: 'Public, complete exploit chains combining Stored XSS with SQL Injection, leading to remote code execution in the widely used MyBB forum engine.'
+    },
+    body: {
+      pl: '<p>Punktem wejścia był Stored XSS (CVE-2021-27889) w funkcjonalności <code>autourl</code> MyCode - wstrzyknięty JavaScript wykonywał się w kontekście innego użytkownika lub administratora. Przejęcie sesji administracyjnej umożliwiało SQL Injection (CVE-2021-27890) w panelu ACP, a następnie egzekucję kodu przez nadpisanie konfiguracji szablonu i jego aktywację.</p><p>Opublikowałem dwa kompletne, działające exploity na różne warianty łańcucha, których nie było w oryginalnym disclosure, oraz pełną analizę techniczną po polsku. Podatności, odnalezione przez Carla Smitha, Simona Scannella oraz Tomasza Młyńskiego, zostały załatane w MyBB 1.8.26.</p>',
+      en: '<p>The entry point was a Stored XSS (CVE-2021-27889) in MyBB\'s MyCode <code>autourl</code> - injected JavaScript executed in the context of another user or administrator. The hijacked admin session enabled SQL Injection (CVE-2021-27890) in the ACP, and ultimately RCE via template configuration overwrite and activation.</p><p>I published two complete, working exploits for distinct chain variants not present in the original disclosure, along with a full technical analysis in Polish. Vulnerabilities discovered by Carl Smith, Simon Scannell, and Tomasz Młyński; fixed in MyBB 1.8.26.</p>'
+    },
+    links: [
+      ['Exploit-DB', 'https://www.exploit-db.com/exploits/49696'],
+      ['Sekurak.pl writeup', 'https://sekurak.pl/grozne-zdalne-wykonywanie-kodu-w-mybb-omowienie-lancucha-podatnosci-bonus/'],
+      ['CVE-2021-27889 (NVD)', 'https://nvd.nist.gov/vuln/detail/CVE-2021-27889'],
+      ['CVE-2021-27890 (NVD)', 'https://nvd.nist.gov/vuln/detail/CVE-2021-27890'],
+    ]
+  },
+  {
+    date: '2018-04-24',
+    slug: 'vlc-heap-overflow-2017',
+    tags: ['PoC', 'Windows', 'Memory Corruption'],
+    title: {
+      pl: 'VLC Media Player < 2.2.5 - heap-based buffer overflow w parserze napisów',
+      en: 'VLC Media Player < 2.2.5 - heap-based buffer overflow in the subtitle parser'
+    },
+    lead: {
+      pl: 'Publiczny PoC dla podatności heap-based buffer overflow w parserze napisów JACOsub, umożliwiającej potencjalnie wykonanie kodu przez spreparowany plik napisów.',
+      en: 'A public PoC for a heap-based buffer overflow in the JACOsub subtitle parser, potentially allowing code execution via a crafted subtitle file.'
+    },
+    body: {
+      pl: '<p>Podatność znajdowała się w funkcji <code>ParseJSS</code> (<code>demux/subtitle.c</code>). Spreparowany plik napisów wywoływał heap corruption w wątku demultipleksera, co przy odpowiednich warunkach mogło prowadzić do wykonania kodu w kontekście odtwarzacza.</p><p>Opublikowałem publiczny PoC wraz z opisem technicznym umożliwiającym odtworzenie błędu i weryfikację poprawki.</p><p>Podatność znaleziona przez zespół Checkpoint Security - Omri Hersovici, Omer Dembinsky, Yannay Livneh. Uwaga: doszło do kolizji CVE z niezwiązanymi CVE-2017-8312 i CVE-2017-8313, odkrytymi niezależnie; PoC stworzony niezależnie.</p>',
+      en: '<p>The vulnerability was in the <code>ParseJSS</code> function (<code>demux/subtitle.c</code>). A crafted subtitle file triggered heap corruption in the demux thread, which under the right conditions could lead to code execution in the player context.</p><p>I published the public PoC along with a brief technical write-up enabling reproduction and fix verification.</p><p>Vulnerability discovered by Checkpoint Security - Omri Hersovici, Omer Dembinsky, Yannay Livneh. Note: a CVE collision occurred with CVE-2017-8312 and CVE-2017-8313, discovered independently; PoC crafted independently.</p>'
+    },
+    links: [
+      ['Exploit-DB', 'https://www.exploit-db.com/exploits/44514'],
+      ['PacketStorm writeup', 'https://packetstorm.news/files/id/147335/'],
+      ['CVE-2017-8311 (NVD)', 'https://nvd.nist.gov/vuln/detail/CVE-2017-8311'],
+    ]
+  },
+  {
+    date: '2017-03-02',
+    slug: 'netgear-rce-chain-2017',
+    exploited: true,
+    tags: ['Research', 'Embedded / IoT', 'Remote Code Execution'],
+    title: {
+      pl: 'NETGEAR DGN2200 - łańcuch: RCE przez command injection + obejście uwierzytelniania',
+      en: 'NETGEAR DGN2200 - chain: RCE via command injection + authentication bypass'
+    },
+    lead: {
+      pl: 'Odkrycie i analiza łańcucha podatności w routerach NETGEAR (m.in. DGN2200): command injection łączony z obejściem uwierzytelniania i CSRF. Podatności były aktywnie wykorzystywane przez grupy APT i botnety IoT.',
+      en: 'Discovery and analysis of a vulnerability chain in NETGEAR routers (including DGN2200): command injection chained with an authentication bypass and CSRF. Actively exploited by APT groups and IoT botnets.'
+    },
+    body: {
+      pl: '<p>Panel administracyjny nie walidował poprawnie przekazywanych parametrów diagnostycznych, co w połączeniu z obejściem uwierzytelniania (PSV-2017-2331, luka związana z użyciem funkcji <code>strstr</code> w <code>httpd</code>) pozwalało na zdalne wykonanie poleceń systemowych.</p><p>Podatności objęły wiele modeli i zostały <a href="https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/linux/http/netgear_dnslookup_cmd_exec.rb">włączone</a> do Metasploit Framework.</p><p>Udokumentowane przypadki aktywnej eksploitacji: malware <a href="https://cert.gov.ua/article/2720">VPNFilter</a> (<a href="https://en.wikipedia.org/wiki/VPNFilter">APT28 FancyBear</a>) oraz botnety <a href="https://unit42.paloaltonetworks.com/new-mirai-variant-targets-enterprise-wireless-presentation-display-systems/">Mirai</a>, <a href="https://www.fortiguard.com/threat-signal-report/4389/botenago-malware-targets-multiple-iot-devices">BotenaGo</a> i <a href="https://www.bitdefender.com/en-us/blog/labs/hold-my-beer-mirai-spinoff-named-liquorbot-incorporates-cryptomining">LiquorBot</a>.</p><p>CVE-2017-6334 i CVE-2017-6077 figurowały na liście CISA KEV (Known Exploited Vulnerabilities).</p><ul><li>PSV-2017-2331 - authentication bypass</li><li>CVE-2017-6077 - authenticated command injection</li><li>CVE-2017-6334 - blind authenticated command injection</li><li>CVE-2017-6336 - cross-site request forgery</li></ul>',
+      en: '<p>The admin panel failed to properly validate diagnostic input parameters. Combined with an authentication bypass (PSV-2017-2331, a flaw involving use of <code>strstr</code> in <code>httpd</code>), this allowed remote execution of system commands.</p><p>The vulnerabilities affected multiple models and were <a href="https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/linux/http/netgear_dnslookup_cmd_exec.rb">incorporated</a> into Metasploit Framework.</p><p>Documented active exploitation: malware <a href="https://cert.gov.ua/article/2720">VPNFilter</a> (<a href="https://en.wikipedia.org/wiki/VPNFilter">APT28 FancyBear</a>) and <a href="https://unit42.paloaltonetworks.com/new-mirai-variant-targets-enterprise-wireless-presentation-display-systems/">Mirai</a>, <a href="https://www.fortiguard.com/threat-signal-report/4389/botenago-malware-targets-multiple-iot-devices">BotenaGo</a> as well as <a href="https://www.bitdefender.com/en-us/blog/labs/hold-my-beer-mirai-spinoff-named-liquorbot-incorporates-cryptomining">LiquorBot</a> IoT botnets.</p><p>CVE-2017-6334 and CVE-2017-6077 appeared on the CISA KEV (Known Exploited Vulnerabilities) list.</p><ul><li>PSV-2017-2331 - authentication bypass</li><li>CVE-2017-6077 - authenticated command injection</li><li>CVE-2017-6334 - blind authenticated command injection</li><li>CVE-2017-6336 - cross-site request forgery</li></ul>'
+    },
+    links: [
+      ['Exploit-DB', 'https://www.exploit-db.com/exploits/50099'],
+      ['Metasploit module', 'https://www.rapid7.com/db/modules/exploit/linux/http/netgear_dnslookup_cmd_exec/'],
+      ['CVE-2017-6334 (NVD, KEV)', 'https://nvd.nist.gov/vuln/detail/CVE-2017-6334'],
+      ['CVE-2017-6077 (NVD, KEV)', 'https://nvd.nist.gov/vuln/detail/CVE-2017-6077'],
+    ]
+  },
+];
+
+const i18n = {
+  pl: {
+    loc: 'Warszawa, Polska · Praca zdalna',
+    bio: [
+      'Researcher specjalizujący się w identyfikacji nieznanych podatności przez analizę logiki i architektury systemów - od firmware embedded, przez systemy operacyjne, po aplikacje webowe. Znany jako SivertPL.',
+      'Od 2017 publicznie ujawniam podatności w realnie wykorzystywanym oprogramowaniu i urządzeniach - od routerów, po systemy mobilne i narzędzia szyfrujące.'
+    ],
+    expH: 'Doświadczenie',
+    skillsH: 'Umiejętności',
+    present: 'obecnie',
+    blogH: 'Research',
+    blogSub: '// public writeups & vulnerabilities',
+    sep: 'professional',
+    tabResearch: 'Research',
+    tabSoon: 'Upcoming',
+    readMore: 'Rozwiń',
+    collapse: 'Zwiń',
+    footer: 'Wszystkie publikacje dotyczą odpowiedzialnie ujawnionych podatności.',
+    months: ['','stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia']
+  },
+  en: {
+    loc: 'Warsaw, Poland · Remote globally',
+    bio: [
+      'Researcher specialising in the discovery of unknown vulnerabilities through logic and architecture analysis - from embedded firmware to operating systems and web applications. Known as SivertPL.',
+      'Since 2017, publicly disclosing vulnerabilities in real-world software and devices - from routers to mobile platforms and encryption tools.'
+    ],
+    expH: 'Experience',
+    skillsH: 'Skills',
+    present: 'present',
+    blogH: 'Research',
+    blogSub: '// public writeups & vulnerabilities',
+    sep: 'professional',
+    tabResearch: 'Research',
+    tabSoon: 'Upcoming',
+    readMore: 'Read more',
+    collapse: 'Collapse',
+    footer: 'All publications concern responsibly disclosed vulnerabilities.',
+    months: null
+  }
+};
+
+let lang = 'pl';
+
+function fmtDate(dateStr, l) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  if (l === 'pl') return d + ' ' + i18n.pl.months[m] + ' ' + y;
+  const names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return names[m-1] + ' ' + d + ', ' + y;
+}
+
+function renderPostList(posts, containerId) {
+  const container = document.getElementById(containerId);
+  const t = i18n[lang];
+  container.querySelectorAll('.post').forEach(p => p.remove());
+
+  posts.forEach(p => {
+    const art = document.createElement('article');
+    art.className = 'post';
+    art.id = p.slug;
+
+    const exploitedBadge = p.exploited ? '<span class="kev">KEV-Listed</span>' : '';
+    const tagsHtml = p.tags.map(tg => `<span>${tg}</span>`).join('');
+    const linksHtml = p.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a>`).join('');
+
+    art.innerHTML = `
+      <div class="meta">
+        <span class="badge">${fmtDate(p.date, lang)}</span>
+        ${exploitedBadge}
+        <span>${p.tags[0]}</span>
+      </div>
+      <h2>${p.title[lang]}</h2>
+      <div class="lead">${p.lead[lang]}</div>
+      <div class="full">
+        ${p.body[lang]}
+        <div class="links">${linksHtml}</div>
+      </div>
+      <div class="ptags">${tagsHtml}</div>
+      <button class="toggle" onclick="tog(this)" data-more="${t.readMore}" data-less="${t.collapse}">${t.readMore}</button>
+    `;
+    container.appendChild(art);
+  });
+}
+
+function updateStatic() {
+  const t = i18n[lang];
+  document.getElementById('loc').textContent = t.loc;
+  document.getElementById('bio').innerHTML = t.bio.map(p => `<p>${p}</p>`).join('');
+  document.getElementById('exp-h').textContent = t.expH;
+  document.getElementById('skills-h').textContent = t.skillsH;
+  document.getElementById('blog-h').textContent = t.blogH;
+  document.getElementById('blog-sub').textContent = t.blogSub;
+  document.getElementById('contact-sep-txt').textContent = t.sep;
+  document.getElementById('tab-research').childNodes[0].textContent = t.tabResearch + ' ';
+  document.getElementById('tab-soon').childNodes[0].textContent = t.tabSoon + ' ';
+  document.getElementById('footer-txt').textContent = t.footer;
+  document.querySelectorAll('.t-present').forEach(el => el.textContent = t.present);
+  document.getElementById('btn-pl').className = lang === 'pl' ? 'on' : '';
+  document.getElementById('btn-en').className = lang === 'en' ? 'on' : '';
+  document.documentElement.lang = lang;
+}
+
+function setLang(l) {
+  lang = l;
+  updateStatic();
+  renderPostList(posts, 'panel-research');
+}
+
+function tog(btn) {
+  const post = btn.closest('.post');
+  post.classList.toggle('open');
+  btn.textContent = post.classList.contains('open') ? btn.dataset.less : btn.dataset.more;
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('panel-' + name).classList.add('on');
+}
+
+
+function handleAnchor() {
+  const hash = window.location.hash.slice(1);
+  if (!hash) return;
+  const found = posts.find(p => p.slug === hash);
+  if (found) switchTab('research', document.getElementById('tab-research'));
+  setTimeout(() => {
+    const el = document.getElementById(hash);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 50);
+}
+
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+updateStatic();
+renderPostList(posts, 'panel-research');
+handleAnchor();
+</script>
+</body>
+</html>
